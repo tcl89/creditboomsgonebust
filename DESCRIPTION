@@ -1,0 +1,12 @@
+Package: creditboomsgonebust
+Type: Package
+Title: RTutor problem set creditboomsgonebust
+Version: 0.1
+Date: 2015-23-04
+Author: Tom
+Maintainer: Tom <thomas.clausing@uni-ulm.de>
+Description: RTutor problem set creditboomsgonebust
+License: 
+	Problem set content: Creative Commons (CC BY-NC)
+	Package code: GPL >= 2.0
+Depends: RTutor, foreign, dplyr, ggplot2, dummies, googleVis, regtools, reshape2, gridExtra, lattice, RColorBrewer, pROC, survey, aod, car
