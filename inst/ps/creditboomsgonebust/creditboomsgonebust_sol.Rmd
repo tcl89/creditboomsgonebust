@@ -16,25 +16,14 @@ set.restore.point.options(display.restore.point=FALSE)
 
 library(RTutor)
 #library(restorepoint)
-setwd("C:/Users/Thomas/Google Drive/Studium/Masterarbeit/1Problemsets/ProblemsetPart1")
+setwd("C:/YourWorkingDirectory/FolderContainingProblemset")
+
 ps.name = "creditboomsgonebust"; sol.file = paste0(ps.name,"_sol.Rmd")
-libs = c("foreign","dplyr","ggplot2","dummies","googleVis","regtools","reshape2","gridExtra","lattice","RColorBrewer","pROC","survey","aod","car") # character vector of all packages you load in the problem set
-#name.rmd.chunks(sol.file,only.empty.chunks=FALSE,keep.options = TRUE)
 
-rps.dir = "C:/Users/Thomas/Google Drive/Studium/Masterarbeit/1Problemsets/ProblemsetPart1"
-app.dir = "C:/Users/Thomas/Google Drive/Studium/Masterarbeit/1Problemsets/ProblemsetPart1/creditboomsgonebust"
-#rtutor.app.skel(ps.name = ps.name, app.name = "creditboomsgonebust", app.dir = app.dir, rps.dir = rps.dir, rps.app = TRUE, overwrite = TRUE)
+libs = c("foreign","dplyr","ggplot2","dummies","googleVis","regtools","reshape2","gridExtra","lattice","RColorBrewer","pROC","survey","aod","car") 
 
-rtutor.package.skel(sol.file = sol.file,ps.name = ps.name,libs = libs,
-  pkg.name = "creditboomsgonebust",
-  pkg.parent.dir = "C:/Users/Thomas/Google Drive/Studium/Masterarbeit/1Problemsets/ProblemsetPart1",
-  author = "Tom",
-  github.user = "tcl89",
-  overwrite = FALSE
-)
-
-setwd("C:/Users/Thomas/Google Drive/Studium/Masterarbeit/1Problemsets/ProblemsetPart1")
 create.ps(sol.file=sol.file, ps.name=ps.name, user.name=NULL,libs=libs, stop.when.finished=FALSE, extra.code.file = "extra_now.r" ,var.txt.file = "creditboomsgonebust.txt",)
+
 show.shiny.ps(ps.name, load.sav=FALSE,  sample.solution=TRUE, is.solved=TRUE, catch.errors=TRUE, launch.browser=TRUE)
 ```
 #>
