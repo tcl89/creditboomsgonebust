@@ -1,6 +1,13 @@
 This package constitutes an interactive R problem set based on the RTutor package (https://github.com/skranz/RTutor). 
 
---- Add **brief** description of content and link to original paper ---
+In the paper “Credit booms gone bust: Monetary Policy, Leverage Cycles, and Financial Crises, 1870
+– 2008” by M. Schularick and A. M. Taylor, the authors take the financial crisis of 2007 – 2009 as
+a cause to investigate the role of money and credit fluctuations and in particular credit booms in
+generating financial instabilities and crashs.
+In this problem set you will be guided through Schularick and Taylor’s main findings. Besides, you
+will learn how to deal with advanced panel data in R.
+
+The paper can be found under the link https://www.aeaweb.org/articles.php?doi=10.1257/aer.102.2.1029
 
 ## 1. Installation
 

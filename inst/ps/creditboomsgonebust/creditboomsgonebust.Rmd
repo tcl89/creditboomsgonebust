@@ -19,7 +19,7 @@ Author:  Thomas Clausing
 
 Date:    22/04/2015
 
-In the paper "Credit booms gone bust: Monetary Policy, Leverage Cycles, and Financial Crises, 1870 -- 2008" by M. Schularick and A. M. Taylor, the authors take the financial crisis of 2007 -- 2009 as a cause to investigate the role of money and credit fluctuations and in particular credit booms in generating financial instabilities and crashs.
+In the paper "Credit Booms Gone Bust: Monetary Policy, Leverage Cycles, and Financial Crises, 1870 -- 2008" by M. Schularick and A. M. Taylor, the authors take the financial crisis of 2007 -- 2009 as a cause to investigate the role of money and credit fluctuations and in particular credit booms in generating financial instabilities and crashs.
 
 In this problem set you will be guided through Schularick and Taylor's main findings. Besides, you will learn how to deal with advanced panel data in R.
 
@@ -68,7 +68,8 @@ In this part of the exercise you are going to reproduce a plot of global average
 
 For a start,you just have to do the averaging. You don't have to adjust or to create any new variables and the quotients of total assets by money has been already prepared for you. Furthermore, you are going to use an easier approach for the calculation than the one in Schularick and Taylor's paper. (In the second part of the exercise, we are also going to learn their way of calculating the averages and we will have a look into the exact differences of both methods.)
 
-We start with loading the prepared data file
+We start with loading the prepared data file.
+
 ```{r "1_1 "}
 data_prep = read.csv("data_prep.csv", sep = ",")
 ```
@@ -102,6 +103,8 @@ Following the grouping, you should have a look at **dp_byyear**. You are given a
 library(dplyr) 
 # Uncomment the next line and adapt the correct parameters to call the function
 # dp_byyear = group_by(?, ?)
+#
+# the last line in this code chunk shows the result from the grouping
 dp_byyear
 ```
 
@@ -241,10 +244,10 @@ We will choose the fitted values as predictors, thus we can just extract them fr
 newdata = select(data,iso,year) # choose the predictors
 
 # get predicted values from estimated model
-data$logLoansbyMoney_mean1 = predict.fe(object = fe.reg1, newdata = newdata, index = "iso")
+data$logLoansbyMoney_mean = predict.fe(object = fe.reg1, newdata = newdata, index = "iso")
 
 # show first few predicted values
-head(data$logLoansbyMoney_mean1)  
+head(data$logLoansbyMoney_mean)  
 # we don't print all - it would print 1946 values, 
 # since that is the column length
 # instead you can check it out in the data explorer
@@ -258,7 +261,7 @@ library(ggplot2)
 base_plot = ggplot(data = data, aes(x = year))
 
 ## layer: log loans by money
-l_llbm_m1 = geom_point(aes(y = logLoansbyMoney_mean1), size = 3, colour = "black")
+l_llbm_m1 = geom_point(aes(y = logLoansbyMoney_mean), size = 3, colour = "black")
 base_plot + l_llbm_m1
 ```
 
@@ -266,6 +269,8 @@ The plot looks quite familiar. We have seen a similar one before when we plotted
 
 
 ## Exercise 1.2 c) -- The Relationship of Assets and Money
+
+Read in the data set again by checking the next code chunk.
 
 ```{r "1_2 c) "}
 # load package and data set
@@ -279,6 +284,7 @@ To have a quick glance you can uncomment the last line of code in the next code 
 ```{r "1_2 c)  2"}
 library(dplyr)
 data=mutate(data, logAssetsbyMoney = log(bassets2/money))
+#
 # change function tail() to head() if you want to see early data
 # change parameter 'n' to a different value to show more years
 # as.data.frame(do(select(group_by(data,iso),year, logAssetsbyMoney), tail(., n = 2)))
@@ -304,22 +310,28 @@ The first year lacks all observations for all 14 countries. In the next two year
 As a consequence, values for year 1870 cannot be used as the base values for a dummy regression (and thus we do not get a coefficient for this year straight away, or in other words, its coefficient is zero, therefore R will omit it).
 For the conversion of the categories into dummy variables, we will have to use another year instead. By default, the next year is used as base year, provided not all values are missing as well. 
 
-Now, let us carry out nearly the same regression as above, except that we change the dependent variable to **logAssetsbyMoney**. This means we will be regressing **logAssetsbyMoney** on **iso** and **year**, both independent variables being treated as categorical variables again. Assign the results from the regression to **fe.reg.2**. 
+Now, let us carry out a regression in the same style as in part b), except that we use **logAssetsbyMoney** as dependent variable. This means we will be regressing **logAssetsbyMoney** on **iso** and **year**, both independent variables being treated as categorical variables again. Assign the results from the regression to **fe.reg2**. (Check the hint if you do not remember the regression from part b).)
 
 ```{r "1_2 c)  4"}
 ```
 
-Remember from the previous part of the exercise that next we need to calculate the predicted values of the dependent variable, which in this case are the global averages of the logarithmized fraction of assets by money. Like before, we can compute them with *predict.fe()* and we will save the values in a variable **logAssetsbyMoney_mean1** in the data frame **data**.
+Remember from the previous part of the exercise that next we need to calculate the predicted values of the dependent variable, which in this case are the global averages of the logarithmized fraction of assets by money. Like before, we can compute them with *predict.fe()* and we will save the values in a variable **logAssetsbyMoney_mean** in the data frame **data**.
 
 ```{r "1_2 c)  5"}
 newdata = select(data, iso, year) # choose the predictors
-# 
-
+# Uncomment and complete the next line to calculate the global averages
+# data$logAssetsbyMoney_mean = ???
+#
 # Once you have correctly calculated the global averages of assets by money in 
-# logs, you can check out the results.
+# logs, you should check out the results 
+# (by uncommenting the last line in this chunk).
+
 # Probably you don't want to print all values on the screen, 
-# but check out the results for the early years
-head(select(data, year, logAssetsbyMoney_mean1))
+# but check out the results for the early years.
+# Change parameter 'n' to a different integer if you want to 
+# display more values
+
+# head(select(data, year, logAssetsbyMoney_mean), n = 5)
 ```
 
 As you saw before, there were no data for year 1870 in the original logarithmic ratio of assets by money. Nevertheless, the last call in the chunk reveals that we get a global average value for 1870, and you perhaps have noticed that it is the same value as for 1871. This has its reason again in the way Stata handles fixed effects regressions. Since 1871 serves as base year, its coefficient is zero. The dummy regression method we use to achieve the same results as from a fixed effects regression does not give us an intercept, and due to the missing data in 1870 there would be no coefficient for this year. This can be interpreted as zero. Then it follows that the predicted value that was reported is equal to the overall intercept that Stata and the function *predict.fe()* add when they compute the results from a fixed effects regression. This value should be equal to the mean value of the country fixed effects. 
@@ -341,6 +353,15 @@ Now let us plot these new global averages like we did before with the first set 
 library(ggplot2)
 # base plot
 base_plot = ggplot(data = data,aes(x = year))
+# uncomment and complete the next lines
+# l_labm_m1 = geom_point(data = ?, 
+#                       aes(y = ?), 
+#                       size = ?,
+#                       color = "grey45")
+# 
+# # now add the new layer layer to object 'base_plot' to 
+# plot the global averages
+# 
 ```
 
 Although the plot in exercise 1, where we plotted the global averages directly from calculating equal weighted averages, is not identical, the difference is rather marginal and for the detection of two eras in the data, the easier way would probably have been sufficient. 
@@ -369,10 +390,12 @@ library(ggplot2)
 
 # create layer and plot it by adding it to the ggplot skeleton 'base plot'
 l_labm_all =  geom_line(aes(x = year, y = logAssetsbyMoney, color = iso), data = data) 
+
+# display the plot 
 base_plot + l_labm_all  
 ```
 
-Next you can add the layer containing the average values of total assets by money to the plot. The layer is saved in the object **l_labm_m1**. Simply add it to the two layers of the preceding code chunk.
+Next you can add the layer containing the average values of total assets by money to the plot. The layer is saved in the object **l_labm_m1**. Simply add it to the two layers of the preceding code chunk to display the average values together with the previous plot.
 
 ```{r "1_3  3"}
 ```
@@ -436,7 +459,7 @@ Let us combine the plots of the global averages that we have produced in the pre
 ```{r "1_3  6"}
 ```
 
-Now you see that the curves show indeed a very similar behaviour. The logarithmic total loans by money ratios, represented by the black dots, are a bit more volatile in the beginning than the total assets by money. But due to the poor data quality of the first few years we should not put too much emphasis on this part of the data. Apart from those early years both lines maintain a strong similarity. Both curves clearly show the beginning of what Schularick and Taylor call a new era after World War 2.
+Now you see that the curves show indeed a very similar behaviour. The logarithmic total loans by money ratios, represented by the black dots, are a bit more volatile in the beginning than total assets by money. But due to the poor data quality of the first few years we should not put too much emphasis on this part of the data. Apart from those early years both lines maintain a strong similarity. Both curves clearly show the beginning of what Schularick and Taylor call a new era after World War 2.
 
 They also state that the decoupling of the credit aggregates reflect the growth in leverage funding and augmented funding through non-monetary liabilities. These sources of funding have increased even more in the last decade. To prevent crises in times where markets are in financial distress, central banks might have to put more and more effort into rescuing banks, eventually having to underwrite the whole funding market. In other words, stability in the funding markets becomes more important than ever and the link between money and credit gets more lose.
 
@@ -511,7 +534,7 @@ In the data file that we are going to read in, you will find the data for three 
 ```{r "2_1  4"}
 # read in the data, then show a few columns
 load("data_2_1.RData")
-tmp.prep.fig4
+prep.fig4
 ```
 
 As you can see, the data is, with all values being in one column, already in long format which lets us plot it easily. If you want to, you can check it out completely by clicking the `data`-button. In column 'era' you find two categories 'PostWW2' and 'PreWW2', and column 'afterCrisis' shows whether a value is calculated within 5 years after a crisis happened and if this is not the case, it is indicated by 'Normal'. In the last column you find the aggregated mean values and in the column 'variable' you find out to which variable this value refers to.
@@ -535,7 +558,7 @@ barchart(means ~ afterCrisis | era,
          # --> two categories in era: plot separately into two different panels
          groups = variable,          # one bar for each variable in 'variable'
          index.cond = list(c(2, 1)), # change order of panels
-         data = tmp.prep.fig4,       # data selection
+         data = prep.fig4,       # data selection
          main = "Aggregates",
          origin = 0,                 # changes appearance of bars  
          auto.key = list(space = "bottom", columns = 3), # change legend
@@ -550,7 +573,7 @@ In contrast to that, the effect on all three variables seems less noticeable in 
 
 Finally, we can calculate the average total impact of a crisis on the development of the respective economic indicators. Basically we will sum up by how much in total the data series were affected in the first five years after a crisis. That is, we are going to calculate the differences of post crisis years to normal years and then sum up these differences. Schularick and Taylor (2012a, p. 1040) call this the "cumulative level effects (relative to trend growth in non-crisis years five years after the event)".
 
-From before, **tmp.prep.fig4** is grouped by **era** and **afterCrisis**. If the latter group would remain, we couldn't sum up over it. Thus we want to group by **era** and **variable** instead, because that way we can sum over **afterCrisis** and keep the variables and eras as index. Use the function group_by() from the package `dplyr` that you already got to know in preceding exercises and assign your result to **tmp.cumlog**. If you need help, click on `hint`.
+From before, **prep.fig4** is grouped by **era** and **afterCrisis**. If the latter group would remain, we couldn't sum up over it. Thus we want to group by **era** and **variable** instead, because that way we can sum over **afterCrisis** and keep the variables and eras as index. Use the function group_by() from the package `dplyr` that you already got to know in preceding exercises and assign your result to **prep.cumlog**. If you need help, click on `hint`.
 
 ```{r "2_1  6"}
 # load package 'dplyr'
@@ -561,8 +584,8 @@ We can now create the differences between post crisis years and normal years. Wi
 
 ```{r "2_1  7"}
 # create differences between post crisis years to non crisis year
-tmp.cumlogD = mutate(tmp.cumlog, Dmeans = means - head(means, 1))
-tmp.cumlogD
+prep.cumlogD = mutate(prep.cumlog, Dmeans = means - head(means, 1))
+prep.cumlogD
 ```
 
 The output reveals that in a crisis year during the second era for example total assets grew by 1.2 percent less than during non-crisis years. We can double check that by manually subtracting the non crisis value 0.1076 from the first crisis value 0.0953 (that gives us -0.0123, which can also be found column 'Dmeans'). Similarly, subtract it from the other values to double check those results, too.
@@ -570,9 +593,9 @@ The output reveals that in a crisis year during the second era for example total
 Since the values for non-crisis years have already cancelled themselves out, we can go straight on to sum the values up. As before, we will be using the function *summarise()* for that. 
 
 ```{r "2_1  8"}
-cumlog = summarise(tmp.cumlogD, cumulativeEffects = sum(Dmeans)) %>% 
+# compute the sum of the differences to 'normal' (saved in 'Dmeans')
+summarise(prep.cumlogD, cumulativeEffects = sum(Dmeans)) %>% 
   arrange(variable, desc(era)) # reorder for reasons of clarity
-cumlog
 ```
 
 We see that pre to after crisis results show a reduction in the cumulative level effects for total bank loans and broad money. In contrast to this, the cumulative effects on total bank assets were actually even higher in the post World War 2 era, they increased by more than six percent.
@@ -603,7 +626,7 @@ As mentioned in the previous part of the exercise, we can only compare the growt
 library(dplyr)
 # data preparation: creation of new variables
 # use grouped data to cope with the specifics of panel data 
-tmp.prep3 = transmute(group_by(data,iso), 
+prep2 = transmute(group_by(data,iso), 
                       # create the growth rates; 
                       # 'diff()' returns n-1 values, thus we pad the vector with NA
                       "D log(Broad money)" = c(NA, (diff(log(money)))), 
@@ -618,7 +641,7 @@ tmp.prep3 = transmute(group_by(data,iso),
 )
 ```
 
-If you like, you can  now have a look at the data in the data explorer, just click `data` to enter it.
+If you like, you can  now have a look at the data in the data explorer, just click `data` to enter it and there choose object **prep2**.
 The index variable **era** indicates in which era (cf. exercise 1) a data value has been observed. The second index variable for the later plot is **afterCrisis**. It indicates the number of years since the last crisis happened. This is done for the first five years after the crisis, assuming that then the effects of a crisis have vanished. If no crisis happened within the last five years, this variable is given the default value of '-1'. The variable **afterCrisis** will be a factor variable, it is calculated by the implicitly loaded user-defined function *compute.dist()*. An example of the exact behaviour of *compute.dist()* can be found in the next info block. Note that in the original paper there are two errors in the creation of the variable **afterCrisis**. Thus the results will differ from our results here. For more info on this detail, you may consult the next info block.
 
 #! start_note "Info: Error in the creation of variable 'sample' in the original Stata code "
@@ -662,7 +685,7 @@ sample[lag(as.numeric(sample)) %in% 4] <- 5
 # Comparison of the mistaken and the corrected versions
 data.frame(select(data, iso, year, crisisST), 
            sample, 
-           afterCrisis = tmp.prep3$afterCrisis)[1805:1830,]
+           afterCrisis = prep2$afterCrisis)[1805:1830,]
 ```
 
 For example, you can see that the crisis in Sweden in 2008, indicated by `0` in **sample** and **afterCrisis** and `1` in **crisisST**, leads to the years 1870-1874 being mistakenly treated as post crisis years in the USA in **sample** -- although in fact a new crisis is indicated in 1873 by **crisisST**. This second crisis is not handled correctly in the original code. 
@@ -679,15 +702,15 @@ Thirdly we remove the grouping variable (thus we have to ungroup the data frame)
 
 ```{r "2_2 5"}
 # remove war years
-tmp.prep3_wow = filter(tmp.prep3, !year %in% seq(from = 1914, to = 1919), 
+prep2_wow = filter(prep2, !year %in% seq(from = 1914, to = 1919), 
                                   !year %in% seq(from = 1939, to = 1947) )
 
 # replace the factor '-1' in 'afterCrisis' by 'Normal'
-levels(tmp.prep3_wow$afterCrisis)[1] = "Normal"
+levels(prep2_wow$afterCrisis)[1] = "Normal"
 
 # remove grouping / variable iso
-tmp.prep3_df = select(ungroup(tmp.prep3_wow), -iso, -year)
-head(tmp.prep3_df, 3)
+prep2_df = select(ungroup(prep2_wow), -iso, -year)
+head(prep2_df, 3)
 
 ```
 
@@ -696,20 +719,20 @@ If you have done the previous part of the exercise, this output should already l
 ```{r "2_2 6"}
 library(reshape2)
 # melt data
-tmp.molten3 = melt(data = tmp.prep3_df, id.vars = c("afterCrisis", "era"))
-head(tmp.molten3, 3)
+prep2.molten = melt(data = prep2_df, id.vars = c("afterCrisis", "era"))
+head(prep2.molten, 3)
 ```
 
 Now we are basically one step away from being able to create the plot that we are interested in. All that is left to do is to create the aggregated mean values. The calculation of these mean values can be done easily with the function *summarise()*. It is now your turn to:
 
-- group the data by the variables **era**, **afterCrisis**, and **variable** (assign the result to **tmp.grouped3**), and then 
+- group the data by the variables **era**, **afterCrisis**, and **variable** (assign the result to **prep2.grouped**), and then 
 - to pass the grouped data to *summarise()*. Recall that you can use aggregate functions as additional parameter in which you specify a column of the data object. The aggregate function will then calculate its results for every group and return one value per group.
 
 ```{r "2_2 7"}
 # Uncomment the lines and adapt what is missing
-# tmp.grouped3 = ?
+# prep2.grouped = ?
 # # Using the function summarise(), calculate the means over 'value'
-# tmp.prep.fig6=  ?( ? , means = ?( ? , na.rm=TRUE))
+# prep2.fig6 =  ?( ? , means = ?( ? , na.rm = TRUE))
 ```
 
 We have now reached the point at which we can plot the bar chart (this is the point at which we started in the first part of this exercise). The call is similar to the one we used to generate the first bar chart in part one, the only difference being that the parameters 'data' and 'main' are adapted to the new data. You can now check the code chunk to create the bar chart.
@@ -719,8 +742,8 @@ barchart(means ~ afterCrisis | era,    # y ~ x, plot data for each category in
                                        # 'era' separately into a different panel
            groups = variable,          # one bar per variable 
            index.cond = list(c(2, 1)), # change order of panels
-           data=tmp.prep.fig6,         # data selection
-           main="Money and Inflation",
+           data = prep2.fig6,         # data selection
+           main = "Money and Inflation",
            origin = 0,                 # changes appearance of bars
            auto.key = list(space = "bottom", columns = 3), # change legend
            par.settings = simpleTheme(col = brewer.pal(3, "Blues")) # change design
@@ -735,13 +758,13 @@ To see how high the overall impact on the first five years after a crisis was, w
 
 ```{r "2_2 9"}
 # group by 'variable' and 'era' 
-tmp3.cumlog = group_by(tmp.prep.fig6, variable, era)
+prep2.cumlog = group_by(prep2.fig6, variable, era)
 
 # creation of differences between non crisis and post crisis years for each group
-tmp3.cumlogD = mutate(tmp3.cumlog, Dmeans = means - head(means, n = 1))
+prep2.cumlogD = mutate(prep2.cumlog, Dmeans = means - head(means, n = 1))
 
 # compute cumulative level effects, then rearrange it
-summarise(tmp3.cumlogD, cumulativeEffects = sum(Dmeans)) %>% arrange(variable, desc(era))
+summarise(prep2.cumlogD, cumulativeEffects = sum(Dmeans)) %>% arrange(variable, desc(era))
 ```
 
 The results reveal that both narrow money and inflation, in the first era yet significantly suffering from reduced growth rates as reaction to a crisis, show now positive cumulative level effects. Narrow money almost unaffected. That proves that the compensation effect in the first year after a crisis, which is probably driven by central bank and government actions and their more aggressive monetary policy responses, is strong enough to reduce the impacts of a crisis on narrow money to a minimum in terms of growth.  The figure for the price index even shows that the inflation was over the five year period roughly three percent higher relative to normal periods in the second era, which is a huge leap when we compare it to the value from the prewar era, which indicates an overall reduction of price levels by nearly 10 percent during the five years altogether. 
@@ -785,7 +808,7 @@ In the creation of the variables, note that 'Real Investment' is set up as the s
 ```{r "2_3  3"}
 library(dplyr)
 # data preparation: creation of new variables
-tmp.prep2 = transmute(group_by(data, iso), # group data to cope with the specifics of panel data 
+prep3 = transmute(group_by(data, iso), # group data to cope with the specifics of panel data 
                   "D log(Real GDP)" = c(NA, (diff(log(rgdp)))), 
                   "D log(Real Investment)"= c(NA, (diff(log(iy) + log(rgdp)))),
                   afterCrisis = as.factor(compute.dist(crisisST)), 
@@ -794,23 +817,25 @@ tmp.prep2 = transmute(group_by(data, iso), # group data to cope with the specifi
            ) 
 
 # remove war years
-tmp.prep2_wow = filter(tmp.prep2, !year %in% seq(from = 1914, to = 1919), 
+prep3_wow = filter(prep3, !year %in% seq(from = 1914, to = 1919), 
                                   !year %in% seq(from = 1939, to = 1947) )
 
 # replace the factor '-1' in 'afterCrisis' by 'Normal'
-levels(tmp.prep2_wow$afterCrisis)[1] = "Normal"
+levels(prep3_wow$afterCrisis)[1] = "Normal"
 
 # remove grouping / variable iso
-tmp.prep2_df = select(ungroup(tmp.prep2_wow), -iso, -year)
-head(tmp.prep2_df, 3)
+prep3_df = select(ungroup(prep3_wow), -iso, -year)
+head(prep3_df, 3)
 ```
 
 #! end_note
 
-Again we want to plot more than one series at the same time, thus we need to melt the data into long format. Remember that when you melt variables you take two or more variables which were in separate columns before and concatenate them all into one column, which is the reason why that format is called long format. 
+Again we want to plot more than one series at the same time, thus we need to melt the data in **prep3_df** into long format. Remember that when you melt variables you take two or more variables which were in separate columns before and concatenate them all into one column, which is the reason why that format is called long format. 
 
-This is supposed to be done by you. You should do it in the same way as it has been done in preceding code. Specify the two arguments 'data' and 'id.vars' and assign the function call to **tmp.molten2**. To check the resulting data frame, print the first four values of **tmp.molten2**.
-As a hint: the ID-variables are usually categorical variables and do not get melted themselves.
+This is supposed to be done by you. You should do it in the same way as it has been done in preceding code. Use package `reshape2` and its function *melt()*. Specify the two parameters 'data' and 'id.vars' and assign the function call to **prep3.molten**. As a hint: the ID-variables are usually categorical variables and do not get melted themselves.
+
+To check the resulting data frame, print the first few values of **prep3.molten** with function *head()* and make sure you assign a convenient value to parameter $n$.
+
 
 ```{r "2_3  4"}
 ```
@@ -840,18 +865,18 @@ To not disclose the answer, the code chunk in which we do the calculation of the
 
 ```{r "2_3  6"}
 # specify correct grouping order (as preparation to summarise correctly)
-tmp.grouped2 = group_by(tmp.molten2, era, afterCrisis, variable)  
+prep3.grouped = group_by(prep3.molten, era, afterCrisis, variable)  
 
 # calculate aggregated values
-tmp.prep.fig5 = summarise(tmp.grouped2, means = mean(value, na.rm = TRUE))
+prep3.fig5 = summarise(prep3.grouped, means = mean(value, na.rm = TRUE))
 
-# display the aggregates (tmp.prep.fig5 is grouped, so output is limited)
-tmp.prep.fig5
+# display the aggregates (prep.fig5 is grouped, so output is limited)
+prep3.fig5
 ```
 
 #! end_note
 
-Because **tmp.prep.fig5** remains grouped after the application of *summarise()*, the output is again limited to ten observations. (You might notice that we grouped by three variables, but now it is only grouped by two variables. This is not a bug -- the function *summarise()* strips off one group in reverse order, so we could theoretically use another aggregate function on the remaining data). We could interpret these values now, but you know by now that it is a lot easier to grasp the results when we create a bar chart again.
+Because **prep.fig5** remains grouped after the application of *summarise()*, the output is again limited to ten observations. (You might notice that we grouped by three variables, but now it is only grouped by two variables. This is not a bug -- the function *summarise()* strips off one group in reverse order, so we could theoretically use another aggregate function on the remaining data). We could interpret these values now, but you know by now that it is a lot easier to grasp the results when we create a bar chart again.
 
 The function *barchart()* expects a formula as input, similar to *lm()*. As with *lm()*, you also assign what you want to plot on the x-axis and the y-axis and you separate it with the symbol `~`. The part behind the symbol `|` is a condition that you can define. It is helpful, when your data comprises categorical variables. Based on the categories, *barchart()* will create different plots. 
 
@@ -869,7 +894,7 @@ library(lattice)
 #            data = ??? ,      # data selection
 #            main = "Real Variables",
 #            origin = 0,                              # changes appearance of bars
-#            auto.key = list(space = "bottom", columns=3),            # change legend
+#            auto.key = list(space = "bottom", columns = 3),          # change legend
 #            par.settings = simpleTheme(col = brewer.pal(3, "Blues")) # change design
 #   )
 ```
@@ -882,11 +907,11 @@ For the calculation of the cumulative level effects we have to group our data an
 
 ```{r "2_3  8"}
 # group by 'variable' and 'era' 
-tmp2.cumlog = group_by(tmp.prep.fig5, variable, era)
+prep3.cumlog = group_by(prep3.fig5, variable, era)
 
 # creation of differences between non crisis and post crisis years for each group
-tmp2.cumlogD = mutate(tmp2.cumlog, Dmeans = means - head(means, n = 1))
-tmp2.cumlogD
+prep3.cumlogD = mutate(prep3.cumlog, Dmeans = means - head(means, n = 1))
+prep3.cumlogD
 ```
 
 If you want to, you can manually double check the results again by subtracting the correct values from each other in column 'means' to get the values in column 'Dmeans'.
@@ -899,7 +924,7 @@ In a last step you can now calculate the cumulative level effects by summation o
 
 From the preceding graph we already saw that there was not much improvement from pre to postwar era in the development of the two variables. In fact, from the cumulative level effects we can even deduce that both real GDP and real investment show a higher total reduction in growth over the five after crisis years in the post World War 2 era than was observed in the era before. For both series, the increase in the numbers is roughly five percent. 
 
-Schularick and Taylor note that the prewar output decline effect is to a huge extent caused by the great depression and they reason this inference with the argument that in the years before the Thirties, economy was not as much influenced by the financial sector. Since then the financial sector has grown widely and became a lot more leveraged. This could be a possible explanation as to why efforts from governments with changes in policies to prevent crisis having too much impact on the real economy could have failed to overcome the newly arisen risks. As mentioned before, after the Thirties policies have been changed towards preventing bank runs by stronger depositor protection, but as Demirgüç-Kunt and Huizinga (2004) were able to demonstrate, this nearly always leads to moral hazard effects, actually even increasing the risk further. Thus effects on the financial sector might be reduced by those policies, but on the real economy the implications now increase.
+Schularick and Taylor note that the prewar output decline effect is to a huge extent caused by the great depression and they reason this inference with the argument that in the years before the Thirties, economy was not as much influenced by the financial sector. Since then the financial sector has grown widely and became a lot more leveraged. This could be a possible explanation as to why efforts from governments with changes in policies to prevent crisis having too much impact on the real economy could have failed to overcome the newly arisen risks. As mentioned before, after the Thirties policies have been changed towards preventing bank runs by stronger depositor protection, but as Demirguec-Kunt and Huizinga (2004) were able to demonstrate, this nearly always leads to moral hazard effects, actually even increasing the risk further. Thus effects on the financial sector might be reduced by those policies, but on the real economy the implications now increase.
 
 **Question 3:** We just saw that the overall impact of crises on both real economy indicators was stronger in the time after World War 2. What has not changed among the two eras is, according to the results here, the time until real investments approximately reached the 'normal' level after a crisis. How long did this take? 
 
@@ -1007,7 +1032,7 @@ In the next step, you will see how the data get grouped and the variables get la
 ```{r "3_1  6"}
 # create lags - use do() to create lags for each group. 
 # seq(5) = c(1,2,3,4,5) --> create 5 lagged series with corresponding lags
-lag.dlloansr = group_by(data, iso) %>% do(., mylag(.$dlloansr, seq(5)))
+lag.dlloansr = do(group_by(data, iso), mylag(.$dlloansr, seq(5)))
 
 # merge lags to data frame 'data'
 data = data.frame(data, select(ungroup(lag.dlloansr), -iso)) 
@@ -1015,13 +1040,20 @@ data = data.frame(data, select(ungroup(lag.dlloansr), -iso))
 
 In the second line we have merged the lags into the data frame **data** so that we can easily pass it, together with the other variables, to functions in later tasks.
 
-The next code chunk serves to double check whether we did no mistake at the transitions between different countries. 
+The next code chunk serves to double check that we did no mistake, especially at the transitions between different countries. 
 
 ```{r "3_1  7"}
-# have a look into the data set
-group_by(data, iso) %>% do(.[3:5,]) %>% 
-  select(iso,year,dlloansr, dlloansr.lag1, dlloansr.lag2, dlloansr.lag3) %>% 
-  as.data.frame()
+# have a look into the data set 
+group_by(data, iso) %>% 
+# now use function do() to display the years 1872 - 1874 for each country;
+# (if you want to, you can change the years that should be displayed 
+#  for each country by changing the selected rows. 
+#  For example, 1:5 would give you 1870 - 1874)
+  do(.[3:5,]) %>% 
+# By default the remaining lagged variables will not be shown to keep the 
+# output tidy. However, you can add them to the selection, too, if you want to.
+  select(iso, year, dlloansr, dlloansr.lag1, dlloansr.lag2) %>% 
+  as.data.frame() # to prevent the output from being shortened
 
 # display the transition between Australia and  Canada
 select(data, iso, year, dlloansr, dlloansr.lag1, dlloansr.lag2, dlloansr.lag3)[136:144,]
@@ -1039,13 +1071,7 @@ You can see how this is done for World War 1, and should do it in the same way f
 data = filter(data, year < 1914 | year > 1919)
 ```
 
-By the same idea (replace war values with NA, lag the variable group wise, then drop all observations), the following two variables also got lagged.
-
-- log(total loans / GDP)
-- log(total loans / broad money)
-
-To prevent the user from having to repeat the same task too often, these lagged series have been added to the data set in the next part of the exercise without their creation being explicitly shown. 
-
+Now you can proceed with the next exercises, throughout which we will need the lagged variables.
 
 ## Exercise 3.2 -- Predicting Crises with Linear Probability Models
 
@@ -1127,7 +1153,7 @@ data_reg1 = select(data, crisisST, contains("dlloansr.lag"))
 # be shown (unchanged, the code shows rows 4 - 10 for all columns)
 ```
 
-Before we begin with the estimation of the model, we select data for a second and third linear model. In these models we will add country fixed effects to model (2) and country and year fixed effects to model (3) (dummy variables for country and year; cf. exercise 1) as additional variables. Therefore you should create two data frames in the same way, but also include the variables **iso** and **year**. Assign the data frames to **data_reg2.tmp** and **data_reg3.tmp**.
+Before we begin with the estimation of the model, we select data for a second and third linear model. In these models we will add country fixed effects to model (2) and country and year fixed effects to model (3) (dummy variables for country and year; cf. exercise 1) as additional variables. Therefore you should create two data frames in the same way, but also include the variables **iso** and **year** (simply include them; we will deal with the conversion into the correct classes in the following step). Assign the data frames to **data_reg2.tmp** and **data_reg3.tmp**.
 
 ```{r "3_2  5"}
 ```
@@ -1155,7 +1181,7 @@ data_reg3 = mutate(data_reg3.tmp,
                    )
 ```
 
-Note that we selected just those variables to be saved in the respective data frames **data_regX** (X = 1, 2, ...) that will be used as variables in the regression. To check again which variables these are you can use the function *names()*, as done in the first line of the following code chunk. We can then pass the data frames to the function *lm()* to get the estimates of the coefficients of these linear probability models. We determine the variable **crisisST** as dependent variable and all other variables within the respective data frames as explanatory variables. This can be achieved by specifying the dependent variable in the formula we are going to pass to *lm()* on the left side of the `~` and setting a dot `.` on the right side, which indicates to use all other variables here. 
+Note that we selected just those variables to be saved in the respective data frames **data_regX** (X = 1, 2, ...) that will actually be used as variables in the regression. To check again which variables these are you can use the function *names()*, as done in the first line of the following code chunk. We can then pass the data frames to the function *lm()* to get the estimates of the coefficients of these linear probability models. We determine the variable **crisisST** as dependent variable and all other variables within the respective data frames as explanatory variables. This can be achieved by specifying the dependent variable in the formula we are going to pass to *lm()* on the left side of the `~` and setting a dot `.` on the right side, which indicates to use all other variables here. 
 
 See how it is done for the first model and then repeat the task for the second and third models and assign the results to **reg2** and **reg3**.
 
@@ -1242,11 +1268,12 @@ Assign your answer to **Answer** as a string (uncomment it first).
 
 #! start_note "Answer"
 
-Answer C is correct, we are most likely left with negative predicted probabilities as described in the info blocks about probability models. Let us check whether this is the case here. How to check is shown for **reg1**, do it yourself for **reg2** and **reg3**.
+Answer C is correct, we are most likely left with negative predicted probabilities as described in the info blocks about probability models. Let us check whether this is the case here. How to check is shown for **reg1** and **reg2**, do it yourself for **reg3**.
 
 ```{r "3_2  12"}
 # sum of negative fitted values from model 1
 sum(reg1$fitted.values < 0)
+sum(reg2$fitted.values < 0)
 ```
 
 You can see that our assumption was correct. Model three, the one including dummy countries and years has the worst performance in this respect. Therefore, in the next part of the exercise we are going to use the proposed logit model instead.
@@ -1370,7 +1397,7 @@ lreg5.ROC = roc(
   # adapt additional parameters
   auc = TRUE, ci = TRUE)
 
-# plot ROC curve
+# plot ROC curve ('legacy.axes = TRUE' makes x-axis ascending)
 plot(lreg5.ROC, print.auc = TRUE, legacy.axes = TRUE)
 
 # compute standard error
@@ -1382,7 +1409,7 @@ For more info on the ROC, see the info block.
 
 info("Receiver Operating Characteristic Curves") # Run this line (Strg-Enter) to show info
 
-We should now calculate the AUC for model specification (4) (saved in **lreg4**). As with model (5), we have to extract 'response' and 'predictor' from the model. This time we are not going to plot the curve afterwards, therefore you can just call the function *roc()* and adapt the parameters but do not have to assign the function's return value to a name.
+We should now calculate the AUC for model specification (4) (saved in **lreg4**). As with model (5) before, we have to extract 'response' and 'predictor' from the model. This time we are not going to plot the curve afterwards, therefore you can just call the function *roc()* and adapt the parameters but do not have to assign the function's return value to a name. (To solve this task, it is very helpful to remember the code from the preceding code chunk.)
 
 ```{r "3_3  9"}
 ```
@@ -1622,19 +1649,27 @@ dim(fv12)[1]; dim(fv14)[1]; dim(roccomp_post)[1]
 
 The last row shows the first dimension (the number of observations/rows) of each element in the code chunk. Some elements have been removed from either prediction.
 
-In the preceding code chunk, both receiver operating characteristics have been computed for you. Now go ahead and plot the curves, specifying the first curve red and the second one blue, just as we did before with the pre war models. To add the second one to the first plot, use the parameter 'add'. Then test the two ROC objects with the function *roc.test()*.
+In the preceding code chunk, both receiver operating characteristics have been computed for you. Now go ahead and plot the curves, specifying the first curve red and the second one blue, just as we did before with the pre war models. To add the second one to the first plot, use the parameter 'add'. 
 
 ```{r "3_5  9"}
 # compute ROC for loan growth model
 loans.ROC_post = roc(response = roccomp_post$crisisST.x, 
                    predictor = roccomp_post$lreg12.fitted.values, 
                    auc = T, ci = T)
-
+# now plot this ROC curve, adding 'legacy.axes = TRUE' to the call
+# of function 'plot()' to get a scale from 0 to 1 on the x-axis 
+ 
 # compute ROC for broad money growth model
 money.ROC_post = roc(response = roccomp_post$crisisST.y, 
                    predictor = roccomp_post$lreg14.fitted.values, 
                    auc = T, ci = T)
+# add this ROC curve to the plot by adding calling function 'plot()' once more and
+# by adding 'add = TRUE' to the its call
+```
 
+Before we interpret the plots, test the two ROC objects with the function *roc.test()*.
+
+```{r "3_5  10"}
 ```
 
 Judging from the plot, the red curve, the ROC curve for model (12), performs better than the blue one. Consequently, the AUC for model (12) is with 0.741 higher than the AUC of model (14), which has an AUC of 0.682. This indicates that the model predicting crises based on past loans growth has a higher predictive power than the model predicting crises based on past money growth. This would be in line with the fact that the latter model did not give us significant coefficients. On the other hand, the test has a p-value of 0.2375 and thus cannot reject the null hypothesis that there is statistical evidence for a difference between the curves. Nevertheless the lack of significance and the lower log likelihood value as well as the lower value of the area under the ROC curve rather indicate to use lagged values of growth of total bank loans to predict financial crises.
@@ -1647,13 +1682,13 @@ Altman, D. G., & Bland, J. M. (1994). Statistics Notes: Diagnostic tests 1: sens
 
 Chatterjee, S., & Hadi, A. S. (2015). Regression Analysis by Example: Wiley.
 
-Demirgüç-Kunt, A., & Huizinga, H. (2004). Market discipline and deposit insurance. Journal of Monetary Economics, 51(2), 375-399. 
+Demirguec-Kunt, A., & Huizinga, H. (2004). Market discipline and deposit insurance. Journal of Monetary Economics, 51(2), 375-399. 
 
 Drukker, D. M. & Gutierrez, R. (2003). Citing references for Stata's cluster-correlated robust variance estimates. StataCorp LP. from http://www.stata.com/support/faqs/statistics/references/.
 
 Gould, W. (2001). Interpreting the intercept in the fixed-effects model. from http://www.stata.com/support/faqs/stat/xtreg2
 
-Gönen, M. (2007). Analyzing Receiver Operating Characteristic Curves with SAS: SAS Institute.
+Goenen, M. (2007). Analyzing Receiver Operating Characteristic Curves with SAS: SAS Institute.
 
 Hart, M. C., Jonker, J., & van Zanden, J. L. (1997). A Financial History of the Netherlands: Cambridge University Press.
 

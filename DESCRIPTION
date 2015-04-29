@@ -1,11 +1,11 @@
 Package: creditboomsgonebust
 Type: Package
 Title: RTutor problem set creditboomsgonebust
-Version: 0.1
-Date: 2015-23-04
-Author: Tom
-Maintainer: Tom <thomas.clausing@uni-ulm.de>
-Description: RTutor problem set creditboomsgonebust
+Version: 1.1 (slightly updated version)
+Date: 2015-29-04
+Author: Thomas Clausing
+Maintainer: Thomas Clausing <thomas.clausing@uni-ulm.de>
+Description: RTutor problem set to "Credit Booms Gone Bust" by M.Schularick and A. M. Taylor
 License: 
 	Problem set content: Creative Commons (CC BY-NC)
 	Package code: GPL >= 2.0
