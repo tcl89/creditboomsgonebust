@@ -2,7 +2,8 @@
 
   
 ```{r include=FALSE}
-ps.dir =  'C:/YourWorkingDirectory/FolderContainingProblemset' # set to the folder in which this file is stored
+
+ps.dir =  'C:/RWorkingDirectory/CreditBoomsGoneBust' # set to the folder in which this file is stored
 ps.file = 'creditboomsgonebust.Rmd' # set to the name of this file
 user.name = '' # set to your user name
 

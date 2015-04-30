@@ -27,7 +27,7 @@ To start the problem set first create a working directory in which files like th
 library(creditboomsgonebust)
 
 # Adapt your working directory to an existing folder
-setwd("C:/problemsets/creditboomsgonebust")
+setwd("C:/YourWorkingDirectory/FolderforProblemset")
 # Adapt your user name
 run.ps(user.name="Jon Doe", package="creditboomsgonebust",
        load.sav=TRUE, sample.solution=FALSE)

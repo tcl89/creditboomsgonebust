@@ -16,14 +16,10 @@ set.restore.point.options(display.restore.point=FALSE)
 
 library(RTutor)
 #library(restorepoint)
-setwd("C:/YourWorkingDirectory/FolderContainingProblemset")
-
+setwd("C:/RWorkingDirectory/CreditBoomsGoneBust")
 ps.name = "creditboomsgonebust"; sol.file = paste0(ps.name,"_sol.Rmd")
-
-libs = c("foreign","dplyr","ggplot2","dummies","googleVis","regtools","reshape2","gridExtra","lattice","RColorBrewer","pROC","survey","aod","car") 
-
+libs = c("foreign","dplyr","ggplot2","dummies","googleVis","regtools","reshape2","gridExtra","lattice","RColorBrewer","pROC","survey","aod","car")
 create.ps(sol.file=sol.file, ps.name=ps.name, user.name=NULL,libs=libs, stop.when.finished=FALSE, extra.code.file = "extra_now.r" ,var.txt.file = "creditboomsgonebust.txt",)
-
 show.shiny.ps(ps.name, load.sav=FALSE,  sample.solution=TRUE, is.solved=TRUE, catch.errors=TRUE, launch.browser=TRUE)
 ```
 #>
