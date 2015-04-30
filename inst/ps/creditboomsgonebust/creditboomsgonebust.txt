@@ -1,0 +1,51 @@
+orgvar | var | descr
+
+data_prep | data_prep| A prepared data set containing two index variables and a variable of the aggregated logarithmic total bank assets by broad money
+iso | iso | The countries in which the variables were observed, abbreviated by country codes.
+year | year | In which year the variables were observed.
+logAssetsbyMoney | logAssetsbyMoney | Aggregated logarithmic total bank assets by broad money.
+global_average | global_average | Country averages of total bank assets by broad money over time.
+logLoansbyMoney | logLoansbyMoney | Aggregated logarithmic total bank loans by broad money.
+LoansbyMoney|LoansbyMoney|Total bank loans by broad money.
+logLoansbyMoney_mean|logLoansbyMoney_mean| Country averages of total bank loans by broad money over time (logarithmic).
+logAssetsbyMoney_mean|logAssetsbyMoney_mean|Country averages of total bank assets by broad money over time (logarithmic).
+loans1 | loans1 | Contains the aggregated bank loans given out by national banks - including savings banks, postal banks, credit unions, mortgage associations, and building societies but not brokerage houses, finance companies, insurance firms, and other financial institutions - to domestic nonfinancial organizations and households and does not include lending within the financial system.
+bassets2|bassets2| Contains the sum of all national balance sheet assets of local banks in the respective country. 'Banks' are defined as in the definition of 'loans1'
+narrowm | narrowm | The narrow monetary aggregate (M1). M1 consists of local currency in circulation like coins and bank notes and in addition to that of overnight deposits and all balances that can be converted into currency at any time.
+money| money | The narrow monetary aggregates (M2 and M3). All kind of deposits with maturities of up to two years are captured by M2, which is called intermediate money by the ECB. Longer deposits as well as short-term repurchase agreements and  MMF (money market funds) shares are covered by M3
+gdp|gdp| (Nominal) gross domestic product; key indicator of everything that is bought in a country in a year
+cpi | cpi | Consumer price index data - monitors the price level within a country for certain goods and services in each year; used to calculate inflation.
+iy | iy | 'investment'-data (or 'investment yield'-data)
+crisisST | crisisST | Indicates in which years a crisis takes place in a country.
+rgdp | rgdp | Real gross domestic product per capita - deflated GDP. The original data seems to have been taken from: http://www.ggdc.net/maddison/maddison-project/data.htm
+stir | stir | Short term interest rates
+ltrate | ltrate | Long term interest rate, whose origin is not specified in more detail and neither are any other details
+pop | pop | Population data. Has most likely been taken from the dataset of the Maddison Project, which is the source for the real GDP data. The Maddison's dataset has been compared to the variable at hand with a spot-check and the datasets were found to be consistent regarding population data. 
+rgdpbarro|rgdpbarro|This variable has been taken from Robert Barro's dataset which is available under "https://www.aeaweb.org/aer/data/mar09/20070351_data.zip". It is provided in Schularick and Taylor's data set but not used in their analysis.
+stocks | stocks | Historical equity-market index data
+govass |govass | Provided in the data set by Schularick and Taylor, but not used in their analysis and no description given and neither stated where taken from.
+era | era | A binary variable referring to the two eras as described in exercise 1.
+afterCrisis|afterCrisis|A category variable, indicating whether or not a crisis happened within the preceding five years.
+variable|variable| Used in melted data to refer the value to the respective variables.
+means|means|Mean values of the investigated variables in 'variable' (changes in different parts of exercise 2). Each mean value refers to a group described by the categories within 'era' and 'afterCrisis'.
+Dmeans|Dmeans| Differences of the mean values in 'mean' to the mean of non crisis years ( = subtracted mean value when 'afterCrisis' equal -1/"Normal" from the other mean values).
+dlcpi|dlcpi|Growth rate of the CPI (=Inflation).
+dlloansr|dlloansr| Deflated bank loans growth rate.
+dlnmr|dlnmr|Deflated narrow money growth rate.
+dlmr|dlmr|Deflated broad money growth rate.
+dlloansr.lag1 |dlloansr.lag1 | First order lag of deflated bank loans growth rate.
+dlloansr.lag2|dlloansr.lag2|Second order lag of deflated bank loans growth rate.
+dlloansr.lag3|dlloansr.lag3|Third order lag of deflated bank loans growth rate.
+dlloansr.lag4|dlloansr.lag4|Fourth order lag of deflated bank loans growth rate.
+dlloansr.lag5|dlloansr.lag5|Fifth order lag of deflated bank loans growth rate.
+dlnmr.lag1|dlnmr.lag1|First order lag of deflated narrow money growth rate.
+dlnmr.lag2|dlnmr.lag2|Second order lag of deflated narrow money growth rate.
+dlnmr.lag3|dlnmr.lag3|Third order lag of deflated narrow money growth rate.
+dlnmr.lag4|dlnmr.lag4|Fourth order lag of deflated narrow money growth rate.
+dlnmr.lag5|dlnmr.lag5|Fifth order lag of deflated narrow money growth rate.
+dlmr.lag1|dlmr.lag1|First order lag of deflated broad money growth rate.
+dlmr.lag2|dlmr.lag2|Second order lag of deflated broad money growth rate.
+dlmr.lag3|dlmr.lag3|Third order lag of deflated broad money growth rate.
+dlmr.lag4|dlmr.lag4|Fourth order lag of deflated broad money growth rate.
+dlmr.lag5|dlmr.lag5|Fifth order lag of deflated broad money growth rate.
+iso.dummy|iso.dummy|Country codes as factors (will be used as country dummies)
