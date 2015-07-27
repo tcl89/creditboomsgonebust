@@ -11,7 +11,7 @@ The paper can be found under the link https://www.aeaweb.org/articles.php?doi=10
 
 ## 1. Installation
 
-RTutor and this package is hosted on Github. To install everything, run the following code in your R console.
+RTutor and this package are hosted on Github. To install everything, run the following code in your R console.
 ```s
 if (!require(devtools))
   install.packages("devtools")
